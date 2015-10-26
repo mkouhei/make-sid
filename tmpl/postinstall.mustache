@@ -1,0 +1,31 @@
+sed -i '
+/cdrom:/d
+s/stretch/sid/g
+s/main/main non-free contrib/g
+' /etc/apt/sources.list
+apt-get update -qq
+apt-get upgrade -y
+apt-get dist-upgrade -y
+apt-get update -qq
+apt-get install -y apt-file
+apt-get install -y sudo
+apt-get install -y dnsutils whois jq lv
+apt-get install -y git etckeeper
+apt-get install -y bash-completion
+apt-get install -y quilt cowbuilder pbuilder devscripts lintian
+apt-get install -y virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
+apt-get install -y gdm3 xkbset awesome
+apt-get install -y fonts-umeplus fonts-vlgothic fonts-droid-
+apt-get install -y golang
+apt-get install -y ipython ipython3 pypy tox
+apt-get install -y ruby rbenv
+apt-get install -y emacs vim lv nano-
+apt-get install -y emacs-mozc uim-mozc uim-gdk3 uim uim-fep
+apt-get intsall -y git-el emacs-goodies-el anything-el auto-complete-el auto-install-el gocode-auto-complete-el migemo-el
+apt-get install -y lxterminal xterm
+apt-get install -y sylpheed-i18n iceweasel-l10n-ja gthumb keepass2 pcmanfm
+apt-get install -y postfix ntp exim4
+apt-get autoremove -y
+adduser {{username}} sudo
+adduser {{username}} adm
+apt-file update
