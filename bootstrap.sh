@@ -56,7 +56,7 @@ ln -sf debian-installer/amd64/pxelinux.cfg
 )
 
 (
-echo $password | sudo -S python ../run.py &
+echo $sudopw | sudo -S python ../run.py &
 tftp_pid=$!
 )
 fi
@@ -140,6 +140,8 @@ VBoxManage startvm $name --type gui
 
 generate_preseed() {
 install -d public
+read -sp "Input sudo password: " sudopw
+echo
 read -sp "Input root password: " rootpw
 echo
 read -p "Input full name: " fullname
