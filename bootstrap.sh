@@ -7,8 +7,8 @@ pylib=$(pwd)/.pylib
 
 cpus=$(( $(sysctl -n hw.ncpu) / 2))
 mems=$(( $(sysctl -n hw.memsize) / 1024 ** 2 / 2))
-iso=debian-testing-amd64-netinst.iso
-url=http://cdimage.debian.org/cdimage/daily-builds/daily/arch-latest/amd64/iso-cd/${iso}
+#iso=debian-testing-amd64-netinst.iso
+#url=http://cdimage.debian.org/cdimage/daily-builds/daily/arch-latest/amd64/iso-cd/${iso}
 netboot=http://ftp.debian.org/debian/dists/stretch/main/installer-amd64/current/images/netboot/netboot.tar.gz
 
 basepath=${HOME}/VirtualBox\ VMs/${name}
@@ -22,14 +22,14 @@ PYTHONPATH=$pylib easy_install -d $pylib passlib pystache tftpy
 install -d download
 (
 cd download
-if [ ! -f ${iso} ]; then
-curl -C - -L -O ${url}
-fi
-)
+#if [ ! -f ${iso} ]; then
+#curl -C - -L -O ${url}
+#fi
 
 if [ ! -f netboot.tar.gz ]; then
 curl -C - -L -O $netboot
 fi
+)
 }
 
 start_httpd() {
@@ -45,17 +45,12 @@ fi
 
 start_tftp_server() {
 echo "### start tftp server ###"
-
 install -d boot
 if [ -f download/netboot.tar.gz ]; then
 (
 cd boot
 tar zxf ../download/netboot.tar.gz
-ln -sf debian-installer/amd64/pxelinux.0
-ln -sf debian-installer/amd64/pxelinux.cfg
-)
 
-(
 echo $sudopw | sudo -S python ../run.py &
 tftp_pid=$!
 )
@@ -93,9 +88,9 @@ VBoxManage modifyvm $name \
     --boot1 disk \
     --boot1 net \
     --boot2 floppy \
-    --boot4 dvd \
+    --boot4 none \
     --nic1 nat \
-    --nictype1 virtio \
+    --nictype1 82540EM \
     --cableconnected1 on \
     --nictrace1 off \
     --nicbootprio1 0 \
@@ -118,7 +113,7 @@ VBoxManage modifyvm $name \
     --videocap off \
     --defaultfrontend default \
     --nattftpserver1 10.0.2.2 \
-    --nattftpfile1 /pxelinux.0
+    --nattftpfile1 pxelinux.0
 }
 
 createStorage() {
@@ -129,7 +124,7 @@ test ! -f "$diskpath" && VBoxManage list hdds | grep -qw "$diskpath" || VBoxMana
     --variant Standard
 VBoxManage storagectl $name --name IDE --add ide --controller PIIX4 --portcount 2 --hostiocache on
 VBoxManage storagectl $name --name SATA --add sata --controller IntelAHCI --portcount 2
-VBoxManage storageattach $name --storagectl IDE --port 1 --type dvddrive --device 0 --medium download/${iso}
+#VBoxManage storageattach $name --storagectl IDE --port 1 --type dvddrive --device 0 --medium download/${iso}
 VBoxManage storageattach $name --storagectl SATA --port 0 --type hdd --medium "$diskpath"
 }
 
@@ -155,7 +150,7 @@ PYTHONPATH=$pylib python gen_preseed.py -r "$rootpw" -f "$fullname" -u "$usernam
 download
 generate_preseed
 start_httpd
-#start_tftp_server
+start_tftp_server
 createVM
 createStorage
 installOS
