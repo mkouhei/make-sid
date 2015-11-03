@@ -2,4 +2,5 @@
 public/
 download/
 .pylib/
+boot/
 *.tar.gz
