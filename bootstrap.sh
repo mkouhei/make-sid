@@ -9,7 +9,7 @@ cpus=$(( $(sysctl -n hw.ncpu) / 2))
 mems=$(( $(sysctl -n hw.memsize) / 1024 ** 2 / 2))
 #iso=debian-testing-amd64-netinst.iso
 #url=http://cdimage.debian.org/cdimage/daily-builds/daily/arch-latest/amd64/iso-cd/${iso}
-netboot=http://ftp.debian.org/debian/dists/stretch/main/installer-amd64/current/images/netboot/netboot.tar.gz
+url=http://archive.ubuntu.com/ubuntu/dists/trusty/main/installer-amd64/current/images/netboot/netboot.tar.gz
 
 basepath=${HOME}/VirtualBox\ VMs/${name}
 diskpath="${basepath}/${name}.vdi"
