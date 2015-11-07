@@ -99,8 +99,8 @@ VBoxManage modifyvm $name \
     --mouse usbmultitouch \
     --keyboard ps2 \
     --audio coreaudio \
-    --audiocontroller ac97 \
-    --audiocodec ad1980 \
+    --audiocontroller hda \
+    --audiocodec stac9221 \
     --clipboard bidirectional \
     --draganddrop disabled \
     --vrde off \
